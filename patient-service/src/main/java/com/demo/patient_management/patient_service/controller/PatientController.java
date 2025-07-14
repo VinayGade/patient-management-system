@@ -4,6 +4,8 @@ import com.demo.patient_management.patient_service.dto.PatientRequestDTO;
 import com.demo.patient_management.patient_service.dto.PatientResponseDTO;
 import com.demo.patient_management.patient_service.exceptions.PatientNotFoundException;
 import com.demo.patient_management.patient_service.service.PatientService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.groups.Default;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +17,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/patients")
+@Tag(name = "patient", description = "API for managing patients")
 public class PatientController {
 
     private final PatientService patientService;
@@ -25,6 +28,7 @@ public class PatientController {
     }
 
     @GetMapping
+    @Operation(summary = "Get all patients")
     public ResponseEntity<List<PatientResponseDTO>> getAllPatients(){
 
         List<PatientResponseDTO> patients = patientService.getAll();
@@ -32,6 +36,7 @@ public class PatientController {
     }
 
     @PostMapping
+    @Operation(summary = "Create a new patient.")
     public ResponseEntity<PatientResponseDTO> createPatient(
             @Valid @RequestBody PatientRequestDTO patientRequestDTO){
 
@@ -40,6 +45,7 @@ public class PatientController {
     }
 
     @PutMapping("/{id}")
+    @Operation(summary = "Update an existing patient.")
     public ResponseEntity<PatientResponseDTO> update(@PathVariable UUID id,
          @Validated({Default.class}) @RequestBody PatientRequestDTO patientRequestDTO)
             throws PatientNotFoundException {
@@ -50,6 +56,7 @@ public class PatientController {
     }
 
     @DeleteMapping("/{id}")
+    @Operation(summary = "Delete the patient.")
     public ResponseEntity<Void> delete(@PathVariable UUID id){
 
         patientService.delete(id);
